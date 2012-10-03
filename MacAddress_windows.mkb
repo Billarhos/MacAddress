@@ -1,0 +1,15 @@
+#!/usr/bin/env mkb
+# Builder mkb file for the MacAddress extension on windows
+
+platform WIN32
+
+options
+{
+    dll
+    x86
+    output-name="lib/win32/MacAddress.dll"
+    output-name-debug="lib/win32/MacAddress_d.dll"
+}
+define S3E_BUILD_EXT
+
+subproject MacAddress_build
