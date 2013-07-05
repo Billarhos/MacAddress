@@ -59,14 +59,15 @@ uint64	GetMacAddressAsNumber()
 	 return address;
 }
 
-const char*	GetMacAddressAsString()
+void GetMacAddressAsString(char * macAddress)
 {
      MACADDRESSGLOBALS->m_MacAddressRunning = true;
 
-  	 const char* address = (const char*)(intptr_t)s3eEdkThreadRunOnOS((s3eEdkThreadFunc)get_MacAddressAsString, 0);
+  	 //const char* address = (const char*)(intptr_t)s3eEdkThreadRunOnOS((s3eEdkThreadFunc)get_MacAddressAsString, 0);
+	 s3eEdkThreadRunOnOS((s3eEdkThreadFunc)get_MacAddressAsString, 0);
 	 while (MACADDRESSGLOBALS->m_MacAddressRunning)
         {
             s3eEdkThreadSleep(20);
         }
-	 return address;
+	 //return address;
 }

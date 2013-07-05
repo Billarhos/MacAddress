@@ -49,7 +49,8 @@ void MacAddressTerminate_platform();
 
 uint64	get_MacAddressAsNumber();
 
-const char*	get_MacAddressAsString();
+//const char*	get_MacAddressAsString();
+void get_MacAddressAsString(char* macAddress);
 
 /**
  * Called by platform code when dialog has been closed.

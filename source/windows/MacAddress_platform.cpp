@@ -11,9 +11,15 @@
 #include <stdio.h>
 #include <windows.h>
 #include <Iphlpapi.h>
+//#include <sstream>
 
-static char macString[256];
 
+#define MALLOC(x) HeapAlloc(GetProcessHeap(), 0, (x))
+#define FREE(x) HeapFree(GetProcessHeap(), 0, (x))
+
+#define SAFE_DELETE(p)	{ if (p) { delete (p);	(p)=NULL; }	}
+#define SAFE_DELETE_ARRAY(x)  if (x) { delete[] x; x = NULL; }
+	
 s3eResult MacAddressInit_platform()
 {
     //Add any platform-specific initialisation code here
@@ -27,48 +33,81 @@ void MacAddressTerminate_platform()
 
 uint64 get_MacAddressAsNumber()
 {
-	IP_ADAPTER_INFO AdapterInfo[16];		// Allocate information for up to 16 NICs
-	DWORD dwBufLen = sizeof(AdapterInfo);	// Save memory size of buffer
+	PIP_ADAPTER_INFO pAdapterInfo;
+    PIP_ADAPTER_INFO pAdapter = NULL;
+	DWORD dwRetVal = 0;
 
-	DWORD dwStatus = GetAdaptersInfo(		// Call GetAdapterInfo
-		AdapterInfo,						// [out] buffer to receive data
-		&dwBufLen);							// [in] size of receive data buffer
-	
-	if (dwStatus != ERROR_SUCCESS)
+	ULONG ulOutBufLen = sizeof (IP_ADAPTER_INFO);
+
+	pAdapterInfo = (IP_ADAPTER_INFO *) MALLOC(sizeof (IP_ADAPTER_INFO));
+    if (pAdapterInfo == NULL) 
 	{
-		MacAddressComplete();
-		return 0;
-	}
+		//printf("Error allocating memory needed to call GetAdaptersinfo\n");
+        return 0;
+    }
+	if (GetAdaptersInfo(pAdapterInfo, &ulOutBufLen) == ERROR_BUFFER_OVERFLOW) 
+	{
+        FREE(pAdapterInfo);
+        pAdapterInfo = (IP_ADAPTER_INFO *) MALLOC(ulOutBufLen);
+        if (pAdapterInfo == NULL) 
+		{
+            //printf("Error allocating memory needed to call GetAdaptersinfo\n");
+            return 0;
+        }
+    }
 
-	PIP_ADAPTER_INFO pAdapterInfo = AdapterInfo; // Contains pointer to current adapter info
 	uint64 MACdword = pAdapterInfo->Address[5] + ((uint64)pAdapterInfo->Address[4] << 8) + ((uint64)pAdapterInfo->Address[3] << 16) + ((uint64)pAdapterInfo->Address[2] << 24)
 						+ ((uint64)pAdapterInfo->Address[1] << 32) + ((uint64)pAdapterInfo->Address[0] << 40);
-		
-	MacAddressComplete();
-    return MACdword;
-}
 
-const char* get_MacAddressAsString()
-{
-	IP_ADAPTER_INFO AdapterInfo[16];		// Allocate information for up to 16 NICs
-	DWORD dwBufLen = sizeof(AdapterInfo);	// Save memory size of buffer
-
-	DWORD dwStatus = GetAdaptersInfo(		// Call GetAdapterInfo
-		AdapterInfo,						// [out] buffer to receive data
-		&dwBufLen);							// [in] size of receive data buffer
-	
-	if (dwStatus != ERROR_SUCCESS)
+	if ((dwRetVal = GetAdaptersInfo(pAdapterInfo, &ulOutBufLen)) == NO_ERROR) 
 	{
-		MacAddressComplete();
-		return NULL;
+        pAdapter = pAdapterInfo;
 	}
 
-	PIP_ADAPTER_INFO pAdapterInfo = AdapterInfo; // Contains pointer to current adapter info
-	
-	sprintf_s (macString, "%02X-%02X-%02X-%02X-%02X-%02X", pAdapterInfo->Address[0], pAdapterInfo->Address[1],
-	pAdapterInfo->Address[2], pAdapterInfo->Address[3], pAdapterInfo->Address[4], pAdapterInfo->Address[5]);
-		
+	if (pAdapterInfo)
+        FREE(pAdapterInfo);
+
 	MacAddressComplete();
-    
-	return macString;
+	return MACdword;
+}
+
+void get_MacAddressAsString(char * macAddress)
+{
+	
+	PIP_ADAPTER_INFO pAdapterInfo;
+    PIP_ADAPTER_INFO pAdapter = NULL;
+	DWORD dwRetVal = 0;
+
+	ULONG ulOutBufLen = sizeof (IP_ADAPTER_INFO);
+
+	pAdapterInfo = (IP_ADAPTER_INFO *) MALLOC(sizeof (IP_ADAPTER_INFO));
+    if (pAdapterInfo == NULL) 
+	{
+		//printf("Error allocating memory needed to call GetAdaptersinfo\n");
+        return;
+    }
+	if (GetAdaptersInfo(pAdapterInfo, &ulOutBufLen) == ERROR_BUFFER_OVERFLOW) 
+	{
+        FREE(pAdapterInfo);
+        pAdapterInfo = (IP_ADAPTER_INFO *) MALLOC(ulOutBufLen);
+        if (pAdapterInfo == NULL) 
+		{
+            //printf("Error allocating memory needed to call GetAdaptersinfo\n");
+            return;
+        }
+    }
+
+	sprintf(macAddress, "%02X-%02X-%02X-%02X-%02X-%02X", pAdapterInfo->Address[0], pAdapterInfo->Address[1],
+	pAdapterInfo->Address[2], pAdapterInfo->Address[3], pAdapterInfo->Address[4], pAdapterInfo->Address[5]);
+
+	if ((dwRetVal = GetAdaptersInfo(pAdapterInfo, &ulOutBufLen)) == NO_ERROR) 
+	{
+        pAdapter = pAdapterInfo;
+	}
+
+	if (pAdapterInfo)
+        FREE(pAdapterInfo);
+
+	MacAddressComplete();
+
 }

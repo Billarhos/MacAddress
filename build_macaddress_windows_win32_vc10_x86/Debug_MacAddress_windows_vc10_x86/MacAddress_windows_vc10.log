@@ -1,0 +1,22 @@
+﻿Build started 12/6/2013 21:01:11.
+     1>Project "I:\Program Files\Marmalade\6.3\examples\EDK\MacAddress\build_macaddress_windows_win32_vc10_x86\MacAddress_windows_vc10.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug_MacAddress_windows_vc10_x86\MacAddress_windows_vc10.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       CustomBuild:
+         All outputs are up-to-date.
+       ClCompile:
+         I:\Program Files\Marmalade\6.3\s3e\bin\CL.exe /c /I"i:/program files/marmalade/6.3/examples/edk/macaddress/source/h" /I"i:/program files/marmalade/6.3/examples/edk/macaddress/h" /I"i:/program files/marmalade/6.3/s3e/edk/h" /I"i:/program files/marmalade/6.3/s3e/h" /I"i:/program files/marmalade/6.3/s3e/h/ext" /I"i:/program files/marmalade/6.3/modules/iwutil/h" /I"i:/program files/marmalade/6.3/modules/iwcore/h" /I. /ZI /nologo /W3 /WX- /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug_MacAddress_windows_vc10_x86\\" /Fd"Debug_MacAddress_windows_vc10_x86\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt "i:/program files/marmalade/6.3/examples/edk/macaddress/source/windows/MacAddress_platform.cpp" /S3Eproject /J /FI"i:\Program Files\Marmalade\6.3\examples\EDK\MacAddress\build_macaddress_windows_win32_vc10_x86\temp_defines_debug.h"
+         MacAddress_platform.cpp
+       Link:
+         I:\Program Files\Marmalade\6.3\s3e\bin\link.exe /ERRORREPORT:PROMPT /OUT:"i:\Program Files\Marmalade\6.3\examples\EDK\MacAddress\lib\win32\MacAddress_d.dll" /INCREMENTAL /NOLOGO /LIBPATH:"i:/program files/marmalade/6.3/s3e/edk/lib/win32/lib/x86" edk_d.lib User32.lib iphlpapi.lib /MANIFEST:NO /DEBUG /PDB:"i:\Program Files\Marmalade\6.3\examples\EDK\MacAddress\lib\win32\MacAddress_d.pdb" /SUBSYSTEM:WINDOWS /OPT:NOREF /OPT:NOICF /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"i:\Program Files\Marmalade\6.3\examples\EDK\MacAddress\lib\win32\MacAddress_d.lib" /MACHINE:X86 /DLL Debug_MacAddress_windows_vc10_x86\MacAddress.obj
+         Debug_MacAddress_windows_vc10_x86\MacAddress_platform.obj
+         Debug_MacAddress_windows_vc10_x86\MacAddress_register.obj
+         MacAddress_windows_vc10.vcxproj -> i:\Program Files\Marmalade\6.3\examples\EDK\MacAddress\lib\win32\MacAddress_d.dll
+       FinalizeBuildStatus:
+         Deleting file "Debug_MacAddress_windows_vc10_x86\MacAddress_windows_vc10.unsuccessfulbuild".
+         Touching "Debug_MacAddress_windows_vc10_x86\MacAddress_windows_vc10.lastbuildstate".
+     1>Done Building Project "I:\Program Files\Marmalade\6.3\examples\EDK\MacAddress\build_macaddress_windows_win32_vc10_x86\MacAddress_windows_vc10.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.75

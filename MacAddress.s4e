@@ -42,7 +42,7 @@ functions:
  */
 
 uint64 get_MacAddressAsNumber() 0
-const char * get_MacAddressAsString() NULL
+void get_MacAddressAsString(char * macAddress)
 append:
 /** @} */
 /** @} */

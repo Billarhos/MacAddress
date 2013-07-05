@@ -10,11 +10,18 @@
 
 #include "MacAddress.h"
 
+
+// For MIPs (and WP8) platform we do not have asm code for stack switching 
+// implemented. So we make LoaderCallStart call manually to set GlobalLock
+#if defined __mips || defined S3E_ANDROID_X86 || (defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP))
+#define LOADER_CALL
+#endif
+
 /**
  * Definitions for functions types passed to/from s3eExt interface
  */
 typedef     uint64(*get_MacAddressAsNumber_t)();
-typedef const char *(*get_MacAddressAsString_t)();
+typedef       void(*get_MacAddressAsString_t)(char * macAddress);
 
 /**
  * struct that gets filled in by MacAddressRegister
@@ -75,39 +82,35 @@ uint64 get_MacAddressAsNumber()
     if (!_extLoad())
         return 0;
 
-#ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching 
-    // implemented. So we make LoaderCallStart call manually to set GlobalLock
+#ifdef LOADER_CALL
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
     uint64 ret = g_Ext.m_get_MacAddressAsNumber();
 
-#ifdef __mips
+#ifdef LOADER_CALL
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
 #endif
 
     return ret;
 }
 
-const char * get_MacAddressAsString()
+void get_MacAddressAsString(char * macAddress)
 {
     IwTrace(MACADDRESS_VERBOSE, ("calling MacAddress[1] func: get_MacAddressAsString"));
 
     if (!_extLoad())
-        return NULL;
+        return;
 
-#ifdef __mips
-    // For MIPs platform we do not have asm code for stack switching 
-    // implemented. So we make LoaderCallStart call manually to set GlobalLock
+#ifdef LOADER_CALL
     s3eDeviceLoaderCallStart(S3E_TRUE, NULL);
 #endif
 
-    const char * ret = g_Ext.m_get_MacAddressAsString();
+    g_Ext.m_get_MacAddressAsString(macAddress);
 
-#ifdef __mips
+#ifdef LOADER_CALL
     s3eDeviceLoaderCallDone(S3E_TRUE, NULL);
 #endif
 
-    return ret;
+    return;
 }

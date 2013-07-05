@@ -1,0 +1,2 @@
+^I:\PROGRAM FILES\MARMALADE\6.3\EXAMPLES\EDK\MACADDRESS\MACADDRESS_WINDOWS.MKB
+"I:\Program Files\Marmalade\6.3\s3e\python\python.exe" "I:\Program Files\Marmalade\6.3\s3e\makefile_builder\mkb.py" "i:/Program Files/Marmalade/6.3/examples/EDK/MacAddress/MacAddress_windows.mkb" "--default-buildenv=vc10" --msvc-project
